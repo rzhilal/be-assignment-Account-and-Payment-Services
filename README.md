@@ -1,8 +1,3 @@
-# Creating a README.md file with the provided content
-
-readme_content = """
-# **Account and Payment Manager Services**
-
 ## **Table of Contents**
 1. [Project Overview](#project-overview)
 2. [Tech Stack](#tech-stack)
@@ -44,11 +39,7 @@ Each service is independently containerized and can be scaled as needed.
 - **PostgreSQL/MongoDB**: Database setup (if not using Docker for the database).
 
 ### **Installation Steps**
-1. Clone the repository:
-   \`\`\`bash
-   git clone https://github.com/your-username/account-payment-manager.git
-   cd account-payment-manager
-   \`\`\`
+1. Clone the repository
 2. Install dependencies:
    \`\`\`bash
    npm install
