@@ -1,0 +1,28 @@
+{
+  "name": "be-assignment-account-and-payment-services",
+  "version": "1.0.0",
+  "description": "1. [Project Overview](#project-overview)\r 2. [Tech Stack](#tech-stack)\r 3. [Architecture](#architecture)\r 4. [Setup and Installation](#setup-and-installation)\r 5. [Running the Application](#running-the-application)\r 6. [API Endpoints](#api-endpoints)\r 7. [Database Schema](#database-schema)\r 8. [Authentication](#authentication)\r 9. [Error Handling](#error-handling)\r 10. [Optional Features](#optional-features)\r 11. [Testing](#testing)\r 12. [Future Improvements](#future-improvements)\r 13. [License](#license)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.1.0",
+    "@prisma/client": "^5.18.0",
+    "bcrypt": "^5.1.1",
+    "fastify": "^4.28.1",
+    "fastify-plugin": "^4.5.1",
+    "fastify-swagger": "^5.2.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.4.0",
+    "prisma": "^5.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}

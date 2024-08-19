@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id          String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username         String             @unique @map("username") @db.VarChar(255)
+  password_hash    String             @map("password_hash") @db.VarChar(255)
+  email            String             @unique @db.VarChar(255)
+  created_at       DateTime?          @default(now()) @map("created_at") @db.Timestamp(6)
+  updated_at       DateTime?          @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  PaymentAccount   PaymentAccount[]
+  PaymentHistory   PaymentHistory[]
+  RecurringPayment RecurringPayment[]
+
+  @@index([email], map: "idx_user_email")
+  @@map("User")
+}
+
+model PaymentAccount {
+  account_id       String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id          String?            @db.Uuid
+  account_type     String             @db.VarChar(50)
+  account_number   String             @unique @db.VarChar(50)
+  balance          Decimal            @default(0.00) @db.Decimal(15, 2)
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?          @default(now()) @db.Timestamp(6)
+  User             User?              @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  PaymentHistory   PaymentHistory[]
+  RecurringPayment RecurringPayment[]
+
+  @@index([user_id], map: "idx_payment_account_user")
+}
+
+model PaymentHistory {
+  history_id       String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id          String?         @db.Uuid
+  account_id       String?         @db.Uuid
+  transaction_id   String?         @db.Uuid
+  amount           Decimal         @db.Decimal(15, 2)
+  timestamp        DateTime?       @default(now()) @db.Timestamp(6)
+  transaction_type String          @db.VarChar(50)
+  status           String          @db.VarChar(50)
+  created_at       DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?       @default(now()) @db.Timestamp(6)
+  PaymentAccount   PaymentAccount? @relation(fields: [account_id], references: [account_id], onDelete: Cascade, onUpdate: NoAction)
+  Transaction      Transaction?    @relation(fields: [transaction_id], references: [transaction_id], onUpdate: NoAction)
+  User             User?           @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([account_id], map: "idx_payment_history_account")
+  @@index([user_id], map: "idx_payment_history_user")
+}
+
+model RecurringPayment {
+  recurring_payment_id String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id              String?         @db.Uuid
+  account_id           String?         @db.Uuid
+  amount               Decimal         @db.Decimal(15, 2)
+  currency             String          @db.VarChar(10)
+  interval             String          @db.VarChar(50)
+  next_execution       DateTime?       @default(now()) @db.Timestamp(6)
+  status               String          @db.VarChar(50)
+  created_at           DateTime?       @default(now()) @db.Timestamp(6)
+  updated_at           DateTime?       @default(now()) @db.Timestamp(6)
+  PaymentAccount       PaymentAccount? @relation(fields: [account_id], references: [account_id], onDelete: Cascade, onUpdate: NoAction)
+  User                 User?           @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([account_id], map: "idx_recurring_payment_account")
+  @@index([user_id], map: "idx_recurring_payment_user")
+}
+
+model Transaction {
+  transaction_id String           @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  amount         Decimal          @db.Decimal(15, 2)
+  currency       String           @db.VarChar(10)
+  timestamp      DateTime?        @default(now()) @db.Timestamp(6)
+  to_address     String?          @db.VarChar(255)
+  status         String           @db.VarChar(50)
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(6)
+  PaymentHistory PaymentHistory[]
+}
