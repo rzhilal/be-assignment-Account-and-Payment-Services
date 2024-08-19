@@ -1,8 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { supabase } from '../utils/supabaseClient';
-import { registerUser } from '../service/userService';
+import { registerUser, getUserAccountsAndTransactions } from '../service/userService';
 
-// Controller untuk Sign Up
 export async function registerUserController(request: FastifyRequest, reply: FastifyReply) {
     const { username, password, email } = request.body as { username: string; password: string; email: string };
 
@@ -19,7 +18,6 @@ export async function registerUserController(request: FastifyRequest, reply: Fas
     }
 }
 
-// Controller untuk Sign In
 export async function loginUserController(request: FastifyRequest, reply: FastifyReply) {
     const { email, password } = request.body as { email: string; password: string };
 
@@ -46,5 +44,14 @@ export async function loginUserController(request: FastifyRequest, reply: Fastif
         });
     } catch (error) {
         return reply.status(500).send({ message: 'Internal server error' });
+    }
+}
+
+export async function getUserAccountsAndTransactionsController(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const data = await getUserAccountsAndTransactions();
+      return reply.status(200).send(data);
+    } catch (error) {
+      return reply.status(400).send({ message: (error as Error).message });
     }
 }

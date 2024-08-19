@@ -37,3 +37,28 @@ export const registerUser = async (username: string, password: string, email: st
         supabaseUserId: supabaseUser?.user?.id, // Supabase user ID
     };
 };
+
+export const getUserAccountsAndTransactions = async () => {
+  const userAccounts = await prisma.paymentAccount.findMany({
+    include: {
+      PaymentHistory: {
+        include: {
+          Transaction: true, // Ini akan tetap mengambil transaksi terkait
+        },
+      },
+    },
+  });
+
+  const transactions = await prisma.paymentHistory.findMany({
+    include: {
+      Transaction: true,
+    },
+  });
+
+  return {
+    accounts: userAccounts,
+    transactions,
+  };
+};
+
+
