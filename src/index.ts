@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import { userRoutes } from './controller/userController';
+import { userRoutes } from './routes/userRoutes';
 
 const server = Fastify({
   logger: {
@@ -33,7 +33,7 @@ server.register(swaggerUi, {
   transformSpecificationClone: true,
 });
 
-server.register(userRoutes);
+server.register(userRoutes, { prefix: '/api/auth' });
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {
