@@ -1,8 +1,13 @@
 import Fastify from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import { userRoutes } from './controller/userController';
 
-const server = Fastify();
+const server = Fastify({
+  logger: {
+    level: 'info'
+  },
+});
 
 server.register(swagger, {
   swagger: {
@@ -27,6 +32,8 @@ server.register(swaggerUi, {
   },
   transformSpecificationClone: true,
 });
+
+server.register(userRoutes);
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {
