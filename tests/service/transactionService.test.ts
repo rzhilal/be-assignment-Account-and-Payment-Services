@@ -134,7 +134,6 @@ describe('Transaction Service', () => {
     it('should successfully withdraw from an account', async () => {
       const initialBalance = '200';
       const withdrawAmount = 50;
-      const expectedBalance = new Decimal(initialBalance).minus(withdrawAmount).toString(); // Correct expected balance
       
       const account = {
         account_id: 'account1',
@@ -168,7 +167,7 @@ describe('Transaction Service', () => {
           status: 'pending',
         },
       });
-      
+
       expect(processTransaction).toHaveBeenCalledWith({
         amount: -withdrawAmount,
         currency: 'USD',
