@@ -74,7 +74,7 @@ If you want to run the application without Docker, ensure PostgreSQL is installe
 3. **Start the Application:**
 
    ```bash
-   npm start
+   npm start / npm run dev
    ```
 
 The application will run at `http://localhost:3000`.
@@ -86,7 +86,3 @@ API documentation can be accessed via Swagger at the following endpoint:
 ```
 http://localhost:3000/docs
 ```
-
-## License
-
-This application is licensed under the [MIT License](LICENSE).
