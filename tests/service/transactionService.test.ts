@@ -167,7 +167,7 @@ describe('Transaction Service', () => {
           status: 'pending',
         },
       });
-
+      // test after doing process transaction
       expect(processTransaction).toHaveBeenCalledWith({
         amount: -withdrawAmount,
         currency: 'USD',
