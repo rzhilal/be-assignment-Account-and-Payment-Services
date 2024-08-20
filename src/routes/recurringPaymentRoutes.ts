@@ -1,8 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { addRecurringPaymentController } from '../controller/recurringPaymentController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 export async function recurringPaymentRoutes(fastify: FastifyInstance) {
   fastify.post('/recurring-payment', {
+    preHandler: authMiddleware,
     schema: {
       body: {
         type: 'object',

@@ -1,9 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import { sendTransactionController, withdrawTransactionController } from '../controller/transactionController';
+import { authMiddleware } from '../middleware/authMiddleware';
 
 export async function transactionRoutes(fastify: FastifyInstance) {
   // Route for sending funds
   fastify.post('/send', {
+    preHandler: authMiddleware,
     schema: {
       body: {
         type: 'object',
@@ -40,6 +42,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
 
   // Route for withdrawing funds
   fastify.post('/withdraw', {
+    preHandler: authMiddleware,
     schema: {
       body: {
         type: 'object',
