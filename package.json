@@ -4,7 +4,7 @@
   "description": "1. [Project Overview](#project-overview)\r 2. [Tech Stack](#tech-stack)\r 3. [Architecture](#architecture)\r 4. [Setup and Installation](#setup-and-installation)\r 5. [Running the Application](#running-the-application)\r 6. [API Endpoints](#api-endpoints)\r 7. [Database Schema](#database-schema)\r 8. [Authentication](#authentication)\r 9. [Error Handling](#error-handling)\r 10. [Optional Features](#optional-features)\r 11. [Testing](#testing)\r 12. [Future Improvements](#future-improvements)\r 13. [License](#license)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "start": "node index.js",
     "start:dev": "docker-compose up --build"
@@ -33,11 +33,14 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^29.5.12",
     "@types/node": "^22.4.1",
     "@types/node-cron": "^3.0.11",
     "@types/node-fetch": "^2.6.11",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "prisma": "^5.18.0",
+    "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }
