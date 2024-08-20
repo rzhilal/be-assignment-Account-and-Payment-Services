@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { Decimal } from 'decimal.js'; // Import Decimal dari decimal.js
-import { processTransaction } from '../middleware/processTransaction'; // Pastikan path-nya benar
+import { Decimal } from 'decimal.js';
+import { processTransaction } from '../middleware/processTransaction';
 
 const prisma = new PrismaClient();
 
@@ -95,9 +95,10 @@ export const sendTransaction = async (user_id: string, account_id: string, amoun
     return transaction;
   };
 
-export const withdrawTransaction = async (user_id: string, account_id: string, amount: number) => {
+  export const withdrawTransaction = async (user_id: string, account_id: string, amount: number) => {
     const amountDecimal = new Decimal(amount);
   
+    // Fetch the payment account
     const account = await prisma.paymentAccount.findUnique({
       where: { account_id },
     });
@@ -106,12 +107,15 @@ export const withdrawTransaction = async (user_id: string, account_id: string, a
       throw new Error('Account not found');
     }
   
+    // Convert account balance to Decimal
     const accountBalance = new Decimal(account.balance);
   
+    // Check for sufficient balance
     if (accountBalance.lessThan(amountDecimal)) {
       throw new Error('Insufficient balance');
     }
   
+    // Create a new transaction record
     const transaction = await prisma.transaction.create({
       data: {
         amount: amountDecimal.negated().toString(), // Convert Decimal to string for Prisma
@@ -121,6 +125,7 @@ export const withdrawTransaction = async (user_id: string, account_id: string, a
       },
     });
   
+    // Create a payment history record
     await prisma.paymentHistory.create({
       data: {
         user_id,
@@ -133,6 +138,7 @@ export const withdrawTransaction = async (user_id: string, account_id: string, a
       },
     });
   
+    // Process the transaction
     await processTransaction({
       amount: amountDecimal.negated().toNumber(),
       currency: transaction.currency,
@@ -140,20 +146,23 @@ export const withdrawTransaction = async (user_id: string, account_id: string, a
       status: transaction.status,
     });
   
+    // Update the payment account balance
     await prisma.paymentAccount.update({
       where: { account_id },
-      data: { balance: account.balance.minus(amountDecimal).toString(), },
+      data: { balance: accountBalance.minus(amountDecimal).toString() },
     });
   
+    // Update the transaction status to completed
     await prisma.transaction.update({
       where: { transaction_id: transaction.transaction_id },
       data: { status: 'completed' },
     });
   
+    // Update payment history status to completed
     await prisma.paymentHistory.updateMany({
       where: { transaction_id: transaction.transaction_id },
       data: { status: 'completed' },
     });
   
     return transaction;
-};
+  };
