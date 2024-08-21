@@ -33,21 +33,6 @@ const createRecurringPayment = async (user_id: string, account_id: string, amoun
   return recurringPayment;
 };
 
-// Fungsi untuk memproses semua pembayaran berulang yang sudah dijadwalkan
-async function processAllRecurringPayments() {
-  const now = new Date();
-  const payments = await prisma.recurringPayment.findMany({
-    where: {
-      status: 'active',
-      next_execution: { lte: now },
-    },
-  });
-
-  for (const payment of payments) {
-    await processRecurringPayment(payment);
-  }
-}
-
 // Fungsi untuk memproses pembayaran berulang individu
 async function processRecurringPayment(payment: any) {
   try {
@@ -126,17 +111,6 @@ function getNextExecutionDate(interval: string): Date {
   return nextExecution;
 }
 
-// Fungsi untuk memulai cron job
-function startCronJobs() {
-  // Schedule cron job to process all recurring payments every minute
-  cron.schedule('* * * * *', async () => {
-    try {
-      await processAllRecurringPayments();
-    } catch (error) {
-      console.error('Error in cron job: ', error);
-    }
-  });
-}
 
 // Export the function to be used elsewhere
-export { createRecurringPayment, startCronJobs };
+export { createRecurringPayment };

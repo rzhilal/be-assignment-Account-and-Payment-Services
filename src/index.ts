@@ -5,7 +5,6 @@ import { userRoutes } from './routes/userRoutes';
 import { paymentAccountRoutes } from './routes/paymentAccountRoutes';
 import { transactionRoutes } from './routes/transactionRoutes';
 import { recurringPaymentRoutes } from './routes/recurringPaymentRoutes';
-import { startCronJobs } from './service/recurringPaymenService';
 
 const server = Fastify({
   logger: {
@@ -53,9 +52,6 @@ server.register(userRoutes, { prefix: '/api/users' });
 server.register(paymentAccountRoutes, { prefix: '/api/accounts' });
 server.register(transactionRoutes, { prefix: '/api/transaction' });
 server.register(recurringPaymentRoutes, { prefix: '/api/recurring' });
-
-// Start cron jobs
-startCronJobs();
 
 // Start the server
 server.listen({ port: 3000 }, (err, address) => {
